@@ -43,11 +43,19 @@ handler500 = "taiga.base.api.views.api_server_error"
 if settings.FRONT_SITEMAP_ENABLED:
     from django.contrib.sitemaps.views import index
     from django.contrib.sitemaps.views import sitemap
+    from django.views.decorators.cache import cache_page
+
     from taiga.front.sitemaps import sitemaps
 
     urlpatterns += [
-        url(r"^front/sitemap\.xml$", index, {"sitemaps": sitemaps}, name="front-sitemap-index"),
-        url(r"^front/sitemap-(?P<section>.+)\.xml$", sitemap, {"sitemaps": sitemaps}, name="front-sitemap")
+        url(r"^front/sitemap\.xml$",
+            cache_page(settings.FRONT_SITEMAP_CACHE_TIMEOUT)(index),
+            {"sitemaps": sitemaps, 'sitemap_url_name': 'front-sitemap'},
+            name="front-sitemap-index"),
+        url(r"^front/sitemap-(?P<section>.+)\.xml$",
+            cache_page(settings.FRONT_SITEMAP_CACHE_TIMEOUT)(sitemap),
+            {"sitemaps": sitemaps},
+            name="front-sitemap")
     ]
 
 

@@ -454,8 +454,11 @@ EXPORTS_TTL = 60 * 60 * 24  # 24 hours
 CELERY_ENABLED = False
 WEBHOOKS_ENABLED = False
 
+
 # If is True /front/sitemap.xml show a valid sitemap of taiga-front client
 FRONT_SITEMAP_ENABLED = False
+FRONT_SITEMAP_CACHE_TIMEOUT = 24*60*60  # In second
+
 
 from .sr import *
 
